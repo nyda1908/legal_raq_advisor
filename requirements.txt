@@ -163,3 +163,5 @@ yarl==1.9.4
 zipp==3.17.0
 rank_bm25
 sentence-transformers
+ragas
+datasets
