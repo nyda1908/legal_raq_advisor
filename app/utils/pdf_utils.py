@@ -1,4 +1,5 @@
 from PyPDF2 import PdfReader
+from langchain.schema import Document
 
 
 class MyPDF:
@@ -6,9 +7,19 @@ class MyPDF:
         self.pdf = pdf
 
     def get_pdf_text(self):
-        text = ""
+        documents = []
         for pdf in self.pdf:
             pdf_reader = PdfReader(pdf)
-            for page in pdf_reader.pages:
-                text += page.extract_text()
-        return text
+            for page_num, page in enumerate(pdf_reader.pages):
+                text = page.extract_text()
+                if text and text.strip():
+                    documents.append(
+                        Document(
+                            page_content=text,
+                            metadata={
+                                "source": pdf.name,
+                                "page": page_num + 1
+                            }
+                        )
+                    )
+        return documents
